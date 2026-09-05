@@ -56,6 +56,10 @@ export default {
       });
 
       if (!resendResponse.ok) {
+        console.error("Resend email request failed", {
+          status: resendResponse.status,
+          body: await resendResponse.text()
+        });
         return jsonResponse({ error: "E-posta gönderilemedi." }, 502);
       }
 
