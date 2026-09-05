@@ -758,7 +758,7 @@
           <p class="mt-5 text-lg leading-8 text-redy-ink/70">REDY, menstrüel sağlık verisini erişilebilir ve sürdürülebilir bir takip altyapısına dönüştürmek için bilimsel ve stratejik iş birliklerine açıktır.</p>
           <a href="mailto:partnerships@redyhealth.co" class="mt-8 inline-flex rounded-full bg-redy-red px-6 py-3 text-sm font-bold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-redy-bordo">partnerships@redyhealth.co</a>
         </div>
-        <form class="reveal rounded-2xl border border-redy-bordo/10 bg-redy-cream p-6 shadow-crisp" action="mailto:partnerships@redyhealth.co" method="post" enctype="text/plain">
+        <form id="contact-form" class="reveal rounded-2xl border border-redy-bordo/10 bg-redy-cream p-6 shadow-crisp">
           <h3 class="text-2xl font-extrabold text-redy-bordo">Yolculuğumuzu Takip Edin</h3>
           <p class="mt-3 text-sm leading-6 text-redy-ink/65">Gelişmeleri, pilot çalışmaları ve yatırım haberlerini takip etmek için bültene katılın.</p>
           <label class="mt-6 block text-sm font-bold text-redy-ink/75" for="email">E-posta</label>
@@ -770,7 +770,8 @@
             <option>Klinik / sağlık partneri</option>
             <option>Topluluk ve medya</option>
           </select>
-          <button type="submit" class="mt-6 w-full rounded-full bg-redy-bordo px-6 py-3 text-sm font-bold text-white transition hover:bg-redy-red">Bültene Katıl</button>
+          <button id="contact-submit" type="submit" class="mt-6 w-full rounded-full bg-redy-bordo px-6 py-3 text-sm font-bold text-white transition hover:bg-redy-red">Bültene Katıl</button>
+          <p id="contact-status" class="mt-4 text-sm font-semibold text-redy-bordo" aria-live="polite"></p>
         </form>
       </div>
     </section>
@@ -792,6 +793,9 @@
     const enButton = document.getElementById('lang-en');
     const menuToggle = document.getElementById('menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
+    const contactForm = document.getElementById('contact-form');
+    const contactSubmit = document.getElementById('contact-submit');
+    const contactStatus = document.getElementById('contact-status');
     const emailInput = document.getElementById('email');
 
     const translations = {
@@ -1037,6 +1041,35 @@
 
     trButton.addEventListener('click', () => setLanguage('tr'));
     enButton.addEventListener('click', () => setLanguage('en'));
+
+    contactForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      contactSubmit.disabled = true;
+      contactStatus.textContent = root.classList.contains('language-en') ? 'Sending...' : 'Gönderiliyor...';
+
+      try {
+        const formData = new FormData(contactForm);
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: formData.get('email'),
+            role: formData.get('role')
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Request failed');
+        }
+
+        contactForm.reset();
+        contactStatus.textContent = root.classList.contains('language-en') ? 'Thanks, we will be in touch.' : 'Teşekkürler, sizinle iletişime geçeceğiz.';
+      } catch {
+        contactStatus.textContent = root.classList.contains('language-en') ? 'Something went wrong. Please try again.' : 'Bir sorun oluştu. Lütfen tekrar deneyin.';
+      } finally {
+        contactSubmit.disabled = false;
+      }
+    });
 
     function setMenuState(isOpen) {
       mobileMenu.classList.toggle('hidden', !isOpen);
