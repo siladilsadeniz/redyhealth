@@ -17,6 +17,12 @@ function jsonResponse(body, status = 200) {
 
 export default {
   async fetch(request, env) {
+    const url = new URL(request.url);
+
+    if (url.pathname !== "/api/contact") {
+      return env.ASSETS.fetch(request);
+    }
+
     if (request.method !== "POST") {
       return jsonResponse({ error: "Method Not Allowed" }, 405);
     }

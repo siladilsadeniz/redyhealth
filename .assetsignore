@@ -1,0 +1,6 @@
+.git/
+.wrangler/
+worker.js
+wrangler.toml
+index-previous.html
+.assetsignore
