@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="REDY, menstrüel kandan sürekli sağlık verisi üreten akıllı ped ve mobil takip platformudur." />
+  <meta name="theme-color" content="#8a1010" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="REDY | Menstrüel Kandan Sürekli Sağlık Verisi" />
+  <meta property="og:description" content="Akıllı ped, hassas ölçüm sistemi ve mobil sağlık içgörüleriyle sürekli sağlık verisi." />
+  <meta property="og:image" content="assets/logo-cropped.png" />
+  <meta property="og:url" content="./" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="REDY | Menstrüel Kandan Sürekli Sağlık Verisi" />
+  <meta name="twitter:description" content="Akıllı ped, hassas ölçüm sistemi ve mobil sağlık içgörüleriyle sürekli sağlık verisi." />
+  <link rel="canonical" href="./" />
+  <link rel="icon" href="assets/logo-cropped.png" type="image/png" />
+  <title>REDY | Menstrüel Kandan Sürekli Sağlık Verisi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            redy: {
+              bordo: '#8a1010',
+              red: '#c82020',
+              mid: '#e05030',
+              salmon: '#f09070',
+              cream: '#fff0e9',
+              ink: '#241414',
+              teal: '#245c5a'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Arial', 'sans-serif'],
+            serif: ['Fraunces', 'Georgia', 'serif']
+          },
+          boxShadow: {
+            soft: '0 22px 70px rgba(138,16,16,.12)',
+            crisp: '0 12px 35px rgba(36,20,20,.08)'
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bordo: #8a1010;
+      --red: #c82020;
+      --mid: #e05030;
+      --salmon: #f09070;
+      --cream: #fff0e9;
+      --ink: #241414;
+      --teal: #245c5a;
+    }
+
+    body {
+      background:
+        linear-gradient(90deg, rgba(138, 16, 16, .055) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(138, 16, 16, .045) 1px, transparent 1px),
+        #fffaf7;
+      background-size: 44px 44px;
+      color: var(--ink);
+    }
+
+    .glass {
+      background: rgba(255, 250, 247, .82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      color: var(--bordo);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .section-label::before {
+      content: "";
+      width: 2rem;
+      height: 1px;
+      background: currentColor;
+      opacity: .7;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .nav-link {
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -8px;
+      height: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      background: var(--red);
+      transition: transform .24s ease;
+    }
+
+    .nav-link:hover::after {
+      transform: scaleX(1);
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--salmon);
+      outline-offset: 3px;
+    }
+
+    .pad-visual {
+      min-height: 390px;
+      background:
+        radial-gradient(circle at 48% 42%, rgba(255, 240, 233, .96), rgba(255, 255, 255, .76) 52%, rgba(240, 144, 112, .18)),
+        linear-gradient(145deg, rgba(255, 255, 255, .95), rgba(255, 240, 233, .82));
+    }
+
+    .pad-core {
+      width: min(70%, 330px);
+      aspect-ratio: 1 / 2.1;
+      border-radius: 48% 48% 44% 44% / 16% 16% 18% 18%;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .9), rgba(255, 240, 233, .74), rgba(255, 255, 255, .9)),
+        repeating-linear-gradient(0deg, rgba(138, 16, 16, .08) 0 2px, transparent 2px 18px);
+      box-shadow: inset 0 0 0 1px rgba(138,16,16,.16), 0 28px 70px rgba(138,16,16,.14);
+    }
+
+    .phone-shell {
+      width: min(100%, 310px);
+      aspect-ratio: 9 / 18.5;
+      border-radius: 2.3rem;
+      box-shadow: 0 34px 80px rgba(36,20,20,.16);
+    }
+
+    .hero-device-stage {
+      min-height: 520px;
+      background:
+        radial-gradient(circle at 35% 35%, rgba(255, 255, 255, .9), transparent 30%),
+        linear-gradient(145deg, rgba(255, 240, 233, .9), rgba(255, 255, 255, .55));
+    }
+
+    .hero-pad {
+      width: min(46vw, 270px);
+      aspect-ratio: 1 / 2.05;
+      border-radius: 48% 48% 44% 44% / 16% 16% 18% 18%;
+      transform: rotate(11deg);
+      background:
+        radial-gradient(ellipse at center, rgba(255,255,255,.82) 0 24%, transparent 25%),
+        linear-gradient(90deg, rgba(255,255,255,.96), rgba(248,238,230,.86), rgba(255,255,255,.98));
+      box-shadow: inset 0 0 0 1px rgba(138,16,16,.12), inset 0 0 0 16px rgba(255,255,255,.58), 0 28px 65px rgba(138,16,16,.14);
+    }
+
+    .hero-pad::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 16%;
+      width: 52%;
+      height: 68%;
+      transform: translateX(-50%);
+      border-radius: 48% 48% 44% 44% / 18% 18% 20% 20%;
+      border: 1px solid rgba(138,16,16,.13);
+      background: linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,240,233,.65));
+    }
+
+    .hero-pad::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 22%;
+      width: 33%;
+      height: 25%;
+      transform: translateX(-50%);
+      border-radius: 1rem;
+      border: 1px solid rgba(200,32,32,.18);
+      background:
+        radial-gradient(circle at 52% 42%, rgba(224,80,48,.35), transparent 10%),
+        repeating-linear-gradient(90deg, rgba(138,16,16,.22) 0 1px, transparent 1px 13px),
+        rgba(240,144,112,.16);
+    }
+
+    .hero-pod {
+      width: 112px;
+      height: 78px;
+      border-radius: 38% 38% 44% 44%;
+      background: linear-gradient(145deg, #fff, #f4e8df);
+      box-shadow: inset 0 0 0 1px rgba(138,16,16,.16), 0 20px 40px rgba(138,16,16,.12);
+    }
+
+    .hero-wire {
+      position: absolute;
+      height: 1px;
+      background: rgba(138,16,16,.72);
+      transform-origin: left center;
+    }
+
+    .language-en [data-tr] { display: none; }
+    .language-tr [data-en] { display: none; }
+  </style>
+</head>
+<body class="language-tr antialiased">
+  <header class="fixed inset-x-0 top-0 z-50 border-b border-redy-bordo/10 glass">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8" aria-label="Ana navigasyon">
+      <a href="#hero" class="flex items-center gap-3" aria-label="REDY ana sayfa">
+        <img src="assets/logo-cropped.png" alt="REDY logo" class="h-14 w-auto object-contain object-left sm:h-16" />
+      </a>
+      <div class="hidden items-center gap-7 text-sm font-semibold text-redy-ink/75 lg:flex">
+        <a class="nav-link" href="#problem">Problem</a>
+        <a class="nav-link" href="#solution">Çözüm</a>
+        <a class="nav-link" href="#technology">Teknoloji</a>
+        <a class="nav-link" href="#science">Bilim</a>
+        <a class="nav-link" href="#market">Pazar</a>
+        <a class="nav-link" href="#team">Ekip</a>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="lang-tr" type="button" aria-label="Türkçe" class="rounded-full bg-redy-bordo px-3 py-2 text-xs font-bold text-white shadow-crisp" aria-pressed="true">TR</button>
+        <button id="lang-en" type="button" aria-label="English" class="rounded-full border border-redy-bordo/20 bg-white px-3 py-2 text-xs font-bold text-redy-bordo" aria-pressed="false">EN</button>
+        <a href="#contact" class="hidden rounded-full bg-redy-red px-4 py-2 text-sm font-bold text-white shadow-crisp transition hover:bg-redy-bordo sm:inline-flex">İletişim</a>
+        <button id="menu-toggle" type="button" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-redy-bordo/20 bg-white text-redy-bordo lg:hidden" aria-label="Menüyü aç" aria-expanded="false" aria-controls="mobile-menu">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+    <div id="mobile-menu" class="hidden border-t border-redy-bordo/10 bg-white/95 px-4 py-4 shadow-crisp lg:hidden">
+      <div class="mx-auto flex max-w-7xl flex-col gap-1 text-sm font-semibold text-redy-ink/75">
+        <a class="rounded-lg px-3 py-3 hover:bg-redy-cream" href="#problem">Problem</a>
+        <a class="rounded-lg px-3 py-3 hover:bg-redy-cream" href="#solution">Çözüm</a>
+        <a class="rounded-lg px-3 py-3 hover:bg-redy-cream" href="#technology">Teknoloji</a>
+        <a class="rounded-lg px-3 py-3 hover:bg-redy-cream" href="#science">Bilim</a>
+        <a class="rounded-lg px-3 py-3 hover:bg-redy-cream" href="#market">Pazar</a>
+        <a class="rounded-lg px-3 py-3 hover:bg-redy-cream" href="#team">Ekip</a>
+        <a class="mt-2 rounded-full bg-redy-red px-4 py-3 text-center text-white" href="#contact">İletişim</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="hero" class="relative min-h-[88vh] overflow-hidden bg-redy-cream pt-24">
+      <div class="mx-auto grid w-full max-w-7xl items-center gap-10 px-4 pb-14 pt-8 sm:px-6 lg:grid-cols-[.95fr_1.05fr] lg:px-8">
+        <div class="reveal relative z-10 max-w-4xl">
+          <p class="section-label">Sürekli sağlık verisi için biyoteknoloji</p>
+          <img src="assets/logo-cropped.png" alt="REDY" class="mt-8 h-auto w-80 object-contain object-left sm:w-[26rem] lg:w-[31rem]" />
+          <p class="mt-5 max-w-3xl text-2xl font-semibold leading-tight text-redy-ink sm:text-3xl">
+            <span data-tr>Menstrüel kandan sürekli sağlık verisi.</span>
+            <span data-en>Red evidence and data for you.</span>
+          </p>
+          <p class="mt-5 max-w-2xl text-lg leading-8 text-redy-ink/72">
+            <span data-tr>Düşük maliyetli, erişilebilir ve sürdürülebilir sağlık takibi için akıllı ped, hassas ölçüm sistemi ve mobil içgörü platformu.</span>
+            <span data-en>A low-cost, accessible, sustainable health platform combining a smart pad, precision biosensing, and mobile insight tracking.</span>
+          </p>
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a href="#solution" class="inline-flex items-center justify-center rounded-full bg-redy-red px-6 py-3 text-sm font-bold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-redy-bordo">Çözümü İncele</a>
+            <a href="#science" class="inline-flex items-center justify-center rounded-full border border-redy-bordo/20 bg-white px-6 py-3 text-sm font-bold text-redy-bordo shadow-crisp transition hover:-translate-y-0.5">Bilimsel Yol Haritası</a>
+          </div>
+          <div class="mt-10 grid max-w-3xl gap-3 sm:grid-cols-3">
+            <div class="rounded-2xl bg-white/82 p-5 shadow-crisp ring-1 ring-redy-bordo/10">
+              <p class="text-xs font-bold uppercase tracking-[.14em] text-redy-red">TAM</p>
+              <p class="mt-2 text-3xl font-extrabold text-redy-bordo">2,1 milyar</p>
+              <p class="mt-1 text-sm text-redy-ink/65">adet gören birey</p>
+            </div>
+            <div class="rounded-2xl bg-white/82 p-5 shadow-crisp ring-1 ring-redy-bordo/10">
+              <p class="text-xs font-bold uppercase tracking-[.14em] text-redy-red">İlk hedef</p>
+              <p class="mt-2 text-3xl font-extrabold text-redy-bordo">CRP</p>
+              <p class="mt-1 text-sm text-redy-ink/65">inflamasyon sinyali</p>
+            </div>
+            <div class="rounded-2xl bg-white/82 p-5 shadow-crisp ring-1 ring-redy-bordo/10">
+              <p class="text-xs font-bold uppercase tracking-[.14em] text-redy-red">Yaklaşım</p>
+              <p class="mt-2 text-lg font-extrabold text-redy-bordo">Tespit Et Doğrula Uygulamaya Taşı</p>
+              <p class="mt-1 text-sm text-redy-ink/65">bilimden ürüne</p>
+            </div>
+          </div>
+        </div>
+        <div class="reveal hero-device-stage relative hidden overflow-hidden rounded-[2rem] border border-redy-bordo/10 p-6 shadow-soft md:block">
+          <div class="absolute left-[9%] top-[9%] hero-pad"></div>
+          <div class="hero-wire left-[43%] top-[49%] w-40 rotate-[28deg]"></div>
+          <div class="hero-wire left-[55%] top-[70%] w-36 rotate-[-23deg]"></div>
+          <div class="absolute left-[50%] top-[66%] hero-pod">
+            <span class="absolute left-1/2 top-4 h-7 w-12 -translate-x-1/2 rounded-full border border-redy-bordo/70"></span>
+          </div>
+          <div class="absolute right-[6%] top-[14%] w-[215px] rounded-[2rem] border-[8px] border-redy-ink bg-redy-ink p-2 shadow-crisp">
+            <div class="overflow-hidden rounded-[1.45rem] bg-white">
+              <div class="mx-auto mt-3 h-5 w-20 rounded-full bg-redy-ink"></div>
+              <div class="p-5">
+                <div class="h-16 rounded-xl border border-redy-bordo/10 bg-redy-cream">
+                  <svg viewBox="0 0 180 60" class="h-full w-full" aria-hidden="true">
+                    <path d="M4 34 C 32 16, 42 52, 72 28 S 118 26, 140 18 S 162 35, 176 20" fill="none" stroke="#8a1010" stroke-width="2" />
+                    <circle cx="170" cy="22" r="5" fill="#c82020" />
+                  </svg>
+                </div>
+                <div class="mt-4 flex gap-2">
+                  <span class="h-3 w-3 rounded-full bg-redy-salmon/45"></span><span class="h-3 w-3 rounded-full bg-redy-salmon/65"></span><span class="h-3 w-3 rounded-full bg-redy-salmon/50"></span><span class="h-3 w-3 rounded-full bg-redy-salmon/30"></span><span class="h-3 w-3 rounded-full bg-redy-bordo"></span>
+                </div>
+                <div class="mt-4 h-20 rounded-xl bg-redy-cream">
+                  <svg viewBox="0 0 180 80" class="h-full w-full" aria-hidden="true">
+                    <path d="M0 48 C 36 20, 58 62, 92 42 S 144 28, 180 52 L180 80 L0 80 Z" fill="#f09070" opacity=".32" />
+                    <path d="M0 58 C 40 34, 58 70, 96 49 S 142 39, 180 60" fill="none" stroke="#c82020" stroke-width="2" opacity=".55" />
+                  </svg>
+                </div>
+                <div class="mt-4 grid grid-cols-3 gap-2">
+                  <div class="h-16 rounded-xl bg-redy-cream"></div>
+                  <div class="h-16 rounded-xl bg-redy-cream"></div>
+                  <div class="h-16 rounded-xl bg-redy-cream"></div>
+                </div>
+                <div class="mt-4 h-10 rounded-xl bg-redy-cream"></div>
+              </div>
+            </div>
+          </div>
+          <div class="absolute left-[43%] top-[48%] h-4 w-4 rounded-full bg-white ring-4 ring-redy-red/20"></div>
+          <div class="absolute left-[63%] top-[69%] h-4 w-4 rounded-full bg-white ring-4 ring-redy-red/20"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="problem" class="bg-white py-24 sm:py-28">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="reveal max-w-3xl">
+          <p class="section-label">Göz ardı edemediğimiz gerçekler</p>
+          <h2 class="mt-5 font-serif text-4xl font-bold tracking-normal text-redy-bordo sm:text-5xl">Sağlık verisi varken görünmez kalıyor.</h2>
+          <p class="mt-5 text-lg leading-8 text-redy-ink/70">Menstrüel döngü, milyonlarca birey için tekrar eden ve bilgi taşıyan bir biyolojik pencere. Buna rağmen tanı süreçleri gecikiyor, erişim bariyerleri büyüyor ve değerli biyolojik veri çoğu zaman atıl kalıyor.</p>
+        </div>
+
+        <div class="mt-12 grid gap-4 md:grid-cols-3">
+          <article class="reveal rounded-2xl border border-redy-bordo/10 bg-redy-cream p-6 shadow-crisp">
+            <p class="text-4xl font-extrabold text-redy-bordo">2,1 milyar</p>
+            <p class="mt-3 text-sm font-bold text-redy-ink/70">Dünya genelinde adet gören birey</p>
+            <p class="mt-3 text-sm leading-6 text-redy-ink/62">WHO, 2026 referansıyla küresel ölçekte erişilebilir tarama ihtiyacını görünür kılar.</p>
+          </article>
+          <article class="reveal rounded-2xl border border-redy-bordo/10 bg-white p-6 shadow-crisp">
+            <p class="text-4xl font-extrabold text-redy-red">6,6 yıl</p>
+            <p class="mt-3 text-sm font-bold text-redy-ink/70">Endometriozis tanı gecikmesi</p>
+            <p class="mt-3 text-sm leading-6 text-redy-ink/62">Erken sinyal yakalama eksikliği klinik yolculuğu uzatır.</p>
+          </article>
+          <article class="reveal rounded-2xl border border-redy-bordo/10 bg-white p-6 shadow-crisp">
+            <p class="text-4xl font-extrabold text-redy-mid">%55,3</p>
+            <p class="mt-3 text-sm font-bold text-redy-ink/70">Teşhis edilmeyen vaka oranları</p>
+            <p class="mt-3 text-sm leading-6 text-redy-ink/62">Düzenli, kişisel ve düşük bariyerli takip sistemlerine ihtiyaç var.</p>
+          </article>
+        </div>
+
+        <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="reveal rounded-xl border border-redy-bordo/10 bg-white p-5"><p class="font-bold text-redy-bordo">Erişim Zorluğu</p><p class="mt-2 text-sm leading-6 text-redy-ink/62">Test ve uzman görüşüne ulaşım herkes için eşit değil.</p></div>
+          <div class="reveal rounded-xl border border-redy-bordo/10 bg-white p-5"><p class="font-bold text-redy-bordo">Tanı Gecikmeleri</p><p class="mt-2 text-sm leading-6 text-redy-ink/62">Semptomlar uzun süre dağınık veriler olarak kalıyor.</p></div>
+          <div class="reveal rounded-xl border border-redy-bordo/10 bg-white p-5"><p class="font-bold text-redy-bordo">Atıl Biyolojik Veri</p><p class="mt-2 text-sm leading-6 text-redy-ink/62">Menstrüel kanın taşıdığı sinyaller rutin takibe dönüşmüyor.</p></div>
+          <div class="reveal rounded-xl border border-redy-bordo/10 bg-white p-5"><p class="font-bold text-redy-bordo">Süreksiz Takip</p><p class="mt-2 text-sm leading-6 text-redy-ink/62">Tekil ölçümler kişisel trendleri açıklamakta yetersiz kalıyor.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="solution" class="bg-redy-cream/80 py-24 sm:py-28">
+      <div class="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[.9fr_1.1fr] lg:px-8">
+        <div class="reveal">
+          <p class="section-label">Çözümümüz</p>
+          <h2 class="mt-5 font-serif text-4xl font-bold text-redy-bordo sm:text-5xl">Akıllı pedden kişisel sağlık içgörüsüne.</h2>
+          <p class="mt-5 text-lg leading-8 text-redy-ink/70">REDY, menstrüel kanı invaziv olmayan ve sürdürülebilir bir örnekleme kaynağı olarak ele alır. Akıllı ped, hassas ölçüm sistemi ve mobil takip uygulaması birlikte çalışarak uzunlamasına sağlık verisi üretir.</p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <span class="rounded-full bg-white px-4 py-2 text-sm font-bold text-redy-bordo shadow-crisp">Kan hücreleri</span>
+            <span class="rounded-full bg-white px-4 py-2 text-sm font-bold text-redy-bordo shadow-crisp">Hormonlar</span>
+            <span class="rounded-full bg-white px-4 py-2 text-sm font-bold text-redy-bordo shadow-crisp">İnflamasyon</span>
+            <span class="rounded-full bg-white px-4 py-2 text-sm font-bold text-redy-bordo shadow-crisp">Nükleik asitler</span>
+            <span class="rounded-full bg-white px-4 py-2 text-sm font-bold text-redy-bordo shadow-crisp">Proteinler</span>
+            <span class="rounded-full bg-white px-4 py-2 text-sm font-bold text-redy-bordo shadow-crisp">Metabolitler</span>
+            <span class="rounded-full bg-white px-4 py-2 text-sm font-bold text-redy-bordo shadow-crisp">Mikrobiyom</span>
+            <span class="rounded-full bg-white px-4 py-2 text-sm font-bold text-redy-bordo shadow-crisp">Döngü sinyalleri</span>
+          </div>
+        </div>
+        <div class="reveal grid gap-4 sm:grid-cols-3">
+          <div class="rounded-2xl bg-white p-6 shadow-crisp">
+            <p class="text-xs font-extrabold uppercase tracking-[.16em] text-redy-salmon">01</p>
+            <h3 class="mt-4 text-xl font-extrabold text-redy-bordo">Akıllı Ped</h3>
+            <p class="mt-3 text-sm leading-6 text-redy-ink/65">Günlük kullanıma yakın, düşük bariyerli örnekleme deneyimi.</p>
+          </div>
+          <div class="rounded-2xl bg-redy-bordo p-6 text-white shadow-crisp">
+            <p class="text-xs font-extrabold uppercase tracking-[.16em] text-redy-salmon">02</p>
+            <h3 class="mt-4 text-xl font-extrabold">Hassas Ölçüm</h3>
+            <p class="mt-3 text-sm leading-6 text-white/72">CRP ile başlayan, çoklu biyobelirteçlere ölçeklenen biyosensör altyapısı.</p>
+          </div>
+          <div class="rounded-2xl bg-white p-6 shadow-crisp">
+            <p class="text-xs font-extrabold uppercase tracking-[.16em] text-redy-salmon">03</p>
+            <h3 class="mt-4 text-xl font-extrabold text-redy-bordo">Mobil Takip</h3>
+            <p class="mt-3 text-sm leading-6 text-redy-ink/65">Kişisel referans aralığı, trend analizi ve yapay zeka destekli içgörüler.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="technology" class="bg-white py-24 sm:py-28">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="reveal flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <div class="max-w-3xl">
+            <p class="section-label">Nasıl çalışır?</p>
+            <h2 class="mt-5 font-serif text-4xl font-bold text-redy-bordo sm:text-5xl">Ped katmanından ölçüm bağlantısına kontrollü akış.</h2>
+          </div>
+          <a href="assets/full%20(1).pdf" class="inline-flex items-center justify-center rounded-full border border-redy-bordo/20 bg-redy-cream px-5 py-3 text-sm font-bold text-redy-bordo shadow-crisp" target="_blank" rel="noreferrer">Teknik PDF</a>
+        </div>
+
+        <div class="mt-12 grid gap-8 lg:grid-cols-[1.05fr_.95fr]">
+          <div class="reveal pad-visual relative overflow-hidden rounded-[2rem] border border-redy-bordo/10 p-8 shadow-soft">
+            <div class="absolute left-8 top-8 rounded-full bg-white px-4 py-2 text-xs font-extrabold uppercase tracking-[.16em] text-redy-bordo shadow-crisp">Akıllı ped mimarisi</div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="pad-core relative">
+                <div class="absolute left-1/2 top-[18%] h-[62%] w-[42%] -translate-x-1/2 rounded-full border border-redy-bordo/20 bg-white/45"></div>
+                <div class="absolute left-1/2 top-[34%] h-24 w-24 -translate-x-1/2 rounded-full bg-redy-red/16 ring-1 ring-redy-red/30"></div>
+                <div class="absolute bottom-[18%] left-1/2 h-3 w-28 -translate-x-1/2 rounded-full bg-redy-teal/70"></div>
+              </div>
+            </div>
+            <div class="absolute bottom-6 left-6 right-6 grid gap-3 sm:grid-cols-4">
+              <div class="rounded-xl bg-white/90 p-3 text-xs font-bold text-redy-bordo shadow-crisp">Üst yüzey</div>
+              <div class="rounded-xl bg-white/90 p-3 text-xs font-bold text-redy-bordo shadow-crisp">Temas alanı</div>
+              <div class="rounded-xl bg-white/90 p-3 text-xs font-bold text-redy-bordo shadow-crisp">Sensör katmanı</div>
+              <div class="rounded-xl bg-white/90 p-3 text-xs font-bold text-redy-bordo shadow-crisp">Ölçüm bağlantısı</div>
+            </div>
+          </div>
+
+          <div class="grid gap-4">
+            <article class="reveal rounded-2xl border border-redy-bordo/10 bg-white p-6 shadow-crisp">
+              <p class="text-sm font-extrabold text-redy-red">01 Kullan</p>
+              <h3 class="mt-2 text-xl font-extrabold text-redy-bordo">Günlük akışa uyumlu örnekleme</h3>
+              <p class="mt-3 text-sm leading-6 text-redy-ink/62">Üst yüzey ve temas alanı, kullanıcı deneyimini tanıdık tutarken ölçüm katmanını destekler.</p>
+            </article>
+            <article class="reveal rounded-2xl border border-redy-bordo/10 bg-white p-6 shadow-crisp">
+              <p class="text-sm font-extrabold text-redy-red">02 Algıla</p>
+              <h3 class="mt-2 text-xl font-extrabold text-redy-bordo">Biyobelirteç sinyalini yakala</h3>
+              <p class="mt-3 text-sm leading-6 text-redy-ink/62">Sensör bölgesi, inflamasyon ve döngüyle ilişkili sinyaller için tasarlanır.</p>
+            </article>
+            <article class="reveal rounded-2xl border border-redy-bordo/10 bg-white p-6 shadow-crisp">
+              <p class="text-sm font-extrabold text-redy-red">03 Ölç</p>
+              <h3 class="mt-2 text-xl font-extrabold text-redy-bordo">Hassas ölçüm sistemine aktar</h3>
+              <p class="mt-3 text-sm leading-6 text-redy-ink/62">Veri, doğrulama odaklı ölçüm bağlantısıyla okunabilir ve karşılaştırılabilir hale gelir.</p>
+            </article>
+            <article class="reveal rounded-2xl border border-redy-bordo/10 bg-white p-6 shadow-crisp">
+              <p class="text-sm font-extrabold text-redy-red">04 Takip Et</p>
+              <h3 class="mt-2 text-xl font-extrabold text-redy-bordo">Mobil sağlık trendine dönüştür</h3>
+              <p class="mt-3 text-sm leading-6 text-redy-ink/62">Tekil sonuçlar zaman içinde kişisel referans aralığı ve sağlık içgörüsüne bağlanır.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="science" class="bg-[#f8fbfb] py-24 sm:py-28">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="reveal max-w-3xl">
+          <p class="section-label">Biyobelirteç yol haritası</p>
+          <h2 class="mt-5 font-serif text-4xl font-bold text-redy-bordo sm:text-5xl">CRP ile başlayıp çoklu biyosensör platformuna genişleyen bilimsel temel.</h2>
+          <p class="mt-5 text-lg leading-8 text-redy-ink/70">REDY’nin yaklaşımı, erken hedef biyobelirteci teknik olarak doğruladıktan sonra klinik anlamlılığı ve ölçeklenebilir ürün deneyimini aynı yol haritasında birleştirir.</p>
+        </div>
+
+        <div class="mt-12 grid gap-4 lg:grid-cols-5">
+          <div class="reveal rounded-2xl border border-redy-bordo/10 bg-white p-5 shadow-crisp"><p class="text-sm font-extrabold text-redy-red">Aşama 1</p><h3 class="mt-3 font-extrabold text-redy-bordo">CRP</h3><p class="mt-2 text-sm leading-6 text-redy-ink/62">C-reaktif proteinle inflamasyon sinyali.</p></div>
+          <div class="reveal rounded-2xl border border-redy-bordo/10 bg-white p-5 shadow-crisp"><p class="text-sm font-extrabold text-redy-red">Aşama 2</p><h3 class="mt-3 font-extrabold text-redy-bordo">Proteinler</h3><p class="mt-2 text-sm leading-6 text-redy-ink/62">Klinik anlamlı protein paneli.</p></div>
+          <div class="reveal rounded-2xl border border-redy-bordo/10 bg-white p-5 shadow-crisp"><p class="text-sm font-extrabold text-redy-red">Aşama 3</p><h3 class="mt-3 font-extrabold text-redy-bordo">Hormonlar</h3><p class="mt-2 text-sm leading-6 text-redy-ink/62">Döngü ve metabolik bağlantılar.</p></div>
+          <div class="reveal rounded-2xl border border-redy-bordo/10 bg-white p-5 shadow-crisp"><p class="text-sm font-extrabold text-redy-red">Aşama 4</p><h3 class="mt-3 font-extrabold text-redy-bordo">Metabolitler</h3><p class="mt-2 text-sm leading-6 text-redy-ink/62">Sistemik sağlık sinyalleri.</p></div>
+          <div class="reveal rounded-2xl border border-redy-bordo/10 bg-redy-bordo p-5 text-white shadow-crisp"><p class="text-sm font-extrabold text-redy-salmon">Aşama 5</p><h3 class="mt-3 font-extrabold">Nükleik asitler</h3><p class="mt-2 text-sm leading-6 text-white/70">Çoklu platform genişlemesi.</p></div>
+        </div>
+
+        <div class="mt-12 grid gap-6 lg:grid-cols-3">
+          <div class="reveal rounded-2xl bg-white p-7 shadow-crisp">
+            <p class="text-3xl font-extrabold text-redy-bordo">Tespit Et</p>
+            <p class="mt-4 text-sm leading-6 text-redy-ink/65">Biyobelirteç sinyalini örnek içinde güvenilir şekilde yakala.</p>
+          </div>
+          <div class="reveal rounded-2xl bg-white p-7 shadow-crisp">
+            <p class="text-3xl font-extrabold text-redy-bordo">Doğrula</p>
+            <p class="mt-4 text-sm leading-6 text-redy-ink/65">Teknik performansı, tekrar edilebilirliği ve kişisel trend değerini doğrula.</p>
+          </div>
+          <div class="reveal rounded-2xl bg-white p-7 shadow-crisp">
+            <p class="text-3xl font-extrabold text-redy-bordo">Uygulamaya Taşı</p>
+            <p class="mt-4 text-sm leading-6 text-redy-ink/65">Sinyali kullanıcı ve klinik paydaşlar için anlamlı aksiyona dönüştür.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="app" class="bg-white py-24 sm:py-28">
+      <div class="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[.95fr_1.05fr] lg:px-8">
+        <div class="reveal flex justify-center lg:justify-start">
+          <div class="phone-shell border-[10px] border-redy-ink bg-redy-ink p-3">
+            <div class="h-full overflow-hidden rounded-[1.7rem] bg-redy-cream">
+              <div class="bg-white px-5 pb-5 pt-8">
+                <div class="mx-auto mb-5 h-1.5 w-16 rounded-full bg-redy-ink/20"></div>
+                <p class="text-xs font-extrabold uppercase tracking-[.16em] text-redy-red">REDY Sağlık</p>
+                <h3 class="mt-2 text-2xl font-extrabold leading-tight text-redy-bordo">Kişisel referans aralığın</h3>
+                <div class="mt-5 rounded-2xl bg-redy-bordo p-4 text-white">
+                  <p class="text-xs font-semibold text-white/70">CRP eğilimi</p>
+                  <p class="mt-2 text-3xl font-extrabold">2.8 mg/L</p>
+                  <div class="mt-5 flex h-20 items-end gap-2">
+                    <span class="h-8 flex-1 rounded-t bg-white/35"></span>
+                    <span class="h-12 flex-1 rounded-t bg-white/45"></span>
+                    <span class="h-7 flex-1 rounded-t bg-white/35"></span>
+                    <span class="h-16 flex-1 rounded-t bg-redy-salmon"></span>
+                    <span class="h-11 flex-1 rounded-t bg-white/45"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="space-y-3 p-5">
+                <div class="rounded-2xl bg-white p-4 shadow-crisp">
+                  <p class="text-xs font-bold text-redy-teal">Yapay zeka içgörüsü</p>
+                  <p class="mt-2 text-sm leading-5 text-redy-ink/70">Bu döngüde inflamasyon sinyalin kişisel ortalamanın üzerinde.</p>
+                </div>
+                <div class="rounded-2xl bg-white p-4 shadow-crisp">
+                  <p class="text-xs font-bold text-redy-bordo">Uzunlamasına takip</p>
+                  <div class="mt-3 grid grid-cols-7 gap-1">
+                    <span class="h-8 rounded bg-redy-salmon/40"></span><span class="h-8 rounded bg-redy-salmon/60"></span><span class="h-8 rounded bg-redy-red/70"></span><span class="h-8 rounded bg-redy-salmon/30"></span><span class="h-8 rounded bg-redy-mid/60"></span><span class="h-8 rounded bg-redy-salmon/40"></span><span class="h-8 rounded bg-redy-teal/30"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal">
+          <p class="section-label">Mobil sağlık takip uygulaması</p>
+          <h2 class="mt-5 font-serif text-4xl font-bold text-redy-bordo sm:text-5xl">Tek seferlik sonuçlar değil, kişisel sağlık eğrisi.</h2>
+          <p class="mt-5 text-lg leading-8 text-redy-ink/70">Uygulama, biyobelirteç ölçümlerini döngü bağlamında saklar; kişisel referans aralığı, trend değişimi ve yapay zeka destekli açıklamalarla veriyi anlaşılır kılar.</p>
+          <div class="mt-8 grid gap-4 sm:grid-cols-3">
+            <div class="rounded-xl border border-redy-bordo/10 bg-redy-cream p-5"><p class="font-extrabold text-redy-bordo">Yapay zeka içgörüleri</p><p class="mt-2 text-sm leading-6 text-redy-ink/62">Kişisel geçmişe göre yorumlanan sağlık içgörüleri.</p></div>
+            <div class="rounded-xl border border-redy-bordo/10 bg-white p-5"><p class="font-extrabold text-redy-bordo">Referans aralığı</p><p class="mt-2 text-sm leading-6 text-redy-ink/62">Tekil normlar yerine kişiye özel baz çizgi.</p></div>
+            <div class="rounded-xl border border-redy-bordo/10 bg-white p-5"><p class="font-extrabold text-redy-bordo">Uzunlamasına veri</p><p class="mt-2 text-sm leading-6 text-redy-ink/62">Döngüler boyunca değişim takibi.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="market" class="bg-redy-bordo py-24 text-white sm:py-28">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="reveal max-w-3xl">
+          <p class="section-label text-redy-salmon">Pazar fırsatı ve iş modeli</p>
+          <h2 class="mt-5 font-serif text-4xl font-bold sm:text-5xl">Erişilebilir takip, ölçeklenebilir abonelik ekonomisi.</h2>
+          <p class="mt-5 text-lg leading-8 text-white/70">REDY; sarf ürün, dijital sağlık takibi ve kurumsal iş birlikleriyle hem kullanıcıya hem de araştırma ekosistemine veri odaklı değer üretir.</p>
+        </div>
+        <div class="mt-12 grid gap-4 md:grid-cols-3">
+          <div class="reveal rounded-2xl bg-white/10 p-6 ring-1 ring-white/14"><p class="text-sm font-bold text-redy-salmon">TAM</p><p class="mt-3 text-4xl font-extrabold">2,1 milyar</p><p class="mt-2 text-sm text-white/66">Küresel adet gören birey popülasyonu</p></div>
+          <div class="reveal rounded-2xl bg-white/10 p-6 ring-1 ring-white/14"><p class="text-sm font-bold text-redy-salmon">SAM</p><p class="mt-3 text-4xl font-extrabold">150-200 milyon</p><p class="mt-2 text-sm text-white/66">Erişilebilir erken hedef segment</p></div>
+          <div class="reveal rounded-2xl bg-white/10 p-6 ring-1 ring-white/14"><p class="text-sm font-bold text-redy-salmon">SOM</p><p class="mt-3 text-4xl font-extrabold">30-130 bin</p><p class="mt-2 text-sm text-white/66">İlk ölçeklenebilir kullanıcı hedefi</p></div>
+        </div>
+        <div class="mt-10 grid gap-4 md:grid-cols-3">
+          <div class="reveal rounded-2xl bg-white p-6 text-redy-ink shadow-crisp"><h3 class="text-xl font-extrabold text-redy-bordo">Sarf Geliri</h3><p class="mt-3 text-sm leading-6 text-redy-ink/65">Akıllı ped aboneliği ve düzenli tüketim modeli.</p></div>
+          <div class="reveal rounded-2xl bg-white p-6 text-redy-ink shadow-crisp"><h3 class="text-xl font-extrabold text-redy-bordo">Abonelik Geliri</h3><p class="mt-3 text-sm leading-6 text-redy-ink/65">Dijital sağlık takibi, gelişmiş raporlama ve içgörü paketleri.</p></div>
+          <div class="reveal rounded-2xl bg-white p-6 text-redy-ink shadow-crisp"><h3 class="text-xl font-extrabold text-redy-bordo">Kurumsal Gelir</h3><p class="mt-3 text-sm leading-6 text-redy-ink/65">Araştırma kurumları, klinik partnerler ve veri odaklı iş birlikleri.</p></div>
+        </div>
+        <p class="reveal mt-8 text-sm font-semibold text-white/72">$20-40 milyar/yıl pazar potansiyeli hedeflenen segment genişlemesiyle ilişkilendirilir.</p>
+      </div>
+    </section>
+
+    <section id="team" class="bg-white py-24 sm:py-28">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="reveal max-w-3xl">
+          <p class="section-label">Biz kimiz?</p>
+          <h2 class="mt-5 font-serif text-4xl font-bold text-redy-bordo sm:text-5xl">Bilimsel merakı ürüne dönüştüren kurucu ekip.</h2>
+        </div>
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          <article class="reveal overflow-hidden rounded-2xl border border-redy-bordo/10 bg-redy-cream shadow-crisp">
+            <div class="flex h-80 items-center justify-center bg-white sm:h-96">
+              <picture class="block h-full w-full">
+                <source srcset="assets/Melisa.webp" type="image/webp" />
+                <img src="assets/Melisa.png" alt="Melisa Yıldız" class="h-full w-full object-cover object-[center_38%]" />
+              </picture>
+            </div>
+            <div class="p-7">
+              <h3 class="text-2xl font-extrabold text-redy-bordo">Melisa Yıldız</h3>
+              <p class="mt-2 font-semibold text-redy-ink/70">Kurucu Ortak</p>
+              <p class="mt-4 text-sm leading-6 text-redy-ink/65">Türk-Alman Üniversitesi | Moleküler Biyoteknoloji</p>
+            </div>
+          </article>
+          <article class="reveal overflow-hidden rounded-2xl border border-redy-bordo/10 bg-redy-cream shadow-crisp">
+            <div class="flex h-80 items-center justify-center bg-white sm:h-96">
+              <picture class="block h-full w-full">
+                <source srcset="assets/Sila.webp" type="image/webp" />
+                <img src="assets/Sila.png" alt="Sıla Dilşa Deniz" class="h-full w-full object-cover object-center" />
+              </picture>
+            </div>
+            <div class="p-7">
+              <h3 class="text-2xl font-extrabold text-redy-bordo">Sıla Dilşa Deniz</h3>
+              <p class="mt-2 font-semibold text-redy-ink/70">Kurucu Ortak</p>
+              <p class="mt-4 text-sm leading-6 text-redy-ink/65">Bahçeşehir Üniversitesi | Moleküler Biyoloji ve Genetik</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="bg-white py-24 sm:py-28">
+      <div class="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[1fr_.85fr] lg:px-8">
+        <div class="reveal">
+          <p class="section-label">Birlikte geliştirelim</p>
+          <h2 class="mt-5 font-serif text-4xl font-bold text-redy-bordo sm:text-5xl">Araştırma kurumları, yatırımcılar ve sağlık partnerleriyle konuşmaya hazırız.</h2>
+          <p class="mt-5 text-lg leading-8 text-redy-ink/70">REDY, menstrüel sağlık verisini erişilebilir ve sürdürülebilir bir takip altyapısına dönüştürmek için bilimsel ve stratejik iş birliklerine açıktır.</p>
+          <a href="mailto:siladilsadeniz@gmail.com" class="mt-8 inline-flex rounded-full bg-redy-red px-6 py-3 text-sm font-bold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-redy-bordo">siladilsadeniz@gmail.com</a>
+        </div>
+        <form class="reveal rounded-2xl border border-redy-bordo/10 bg-redy-cream p-6 shadow-crisp" action="mailto:siladilsadeniz@gmail.com" method="post" enctype="text/plain">
+          <h3 class="text-2xl font-extrabold text-redy-bordo">Yolculuğumuzu Takip Edin</h3>
+          <p class="mt-3 text-sm leading-6 text-redy-ink/65">Gelişmeleri, pilot çalışmaları ve yatırım haberlerini takip etmek için bültene katılın.</p>
+          <label class="mt-6 block text-sm font-bold text-redy-ink/75" for="email">E-posta</label>
+          <input id="email" name="email" type="email" required placeholder="ornek@mail.com" class="mt-2 w-full rounded-xl border border-redy-bordo/15 bg-white px-4 py-3 text-sm outline-none transition focus:border-redy-red focus:ring-4 focus:ring-redy-red/10" />
+          <label class="mt-4 block text-sm font-bold text-redy-ink/75" for="role">İlgi alanı</label>
+          <select id="role" name="role" class="mt-2 w-full rounded-xl border border-redy-bordo/15 bg-white px-4 py-3 text-sm outline-none transition focus:border-redy-red focus:ring-4 focus:ring-redy-red/10">
+            <option>Araştırma kurumu</option>
+            <option>Yatırımcı</option>
+            <option>Klinik / sağlık partneri</option>
+            <option>Topluluk ve medya</option>
+          </select>
+          <button type="submit" class="mt-6 w-full rounded-full bg-redy-bordo px-6 py-3 text-sm font-bold text-white transition hover:bg-redy-red">Bültene Katıl</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-redy-bordo/10 bg-redy-ink py-8 text-white">
+    <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+      <div class="flex items-center gap-3">
+        <img src="assets/logo-cropped.png" alt="REDY logo" class="h-12 w-auto rounded bg-white object-contain object-left px-3 py-2" />
+        <p class="text-sm text-white/65">Senin için kanıta dayalı sağlık verisi.</p>
+      </div>
+      <p class="text-sm text-white/55">© 2026 REDY. Tüm hakları saklıdır.</p>
+    </div>
+  </footer>
+
+  <script>
+    const root = document.body;
+    const trButton = document.getElementById('lang-tr');
+    const enButton = document.getElementById('lang-en');
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const emailInput = document.getElementById('email');
+
+    const translations = {
+      'Problem': { tr: 'Problem', en: 'Problem' },
+      'Çözüm': { tr: 'Çözüm', en: 'Solution' },
+      'Teknoloji': { tr: 'Teknoloji', en: 'Technology' },
+      'Bilim': { tr: 'Bilim', en: 'Science' },
+      'Pazar': { tr: 'Pazar', en: 'Market' },
+      'Ekip': { tr: 'Ekip', en: 'Team' },
+      'İletişim': { tr: 'İletişim', en: 'Contact' },
+      'Biotech for continuous health data': { tr: 'Sürekli sağlık verisi için biyoteknoloji', en: 'Biotech for continuous health data' },
+      'Menstrüel kandan sürekli sağlık verisi.': { tr: 'Menstrüel kandan sürekli sağlık verisi.', en: 'Continuous health data from menstrual blood.' },
+      'Red evidence and data for you.': { tr: 'Senin için kanıta dayalı sağlık verisi.', en: 'Red evidence and data for you.' },
+      'Düşük maliyetli, erişilebilir ve sürdürülebilir sağlık takibi için akıllı ped, hassas ölçüm sistemi ve mobil içgörü platformu.': { tr: 'Düşük maliyetli, erişilebilir ve sürdürülebilir sağlık takibi için akıllı ped, hassas ölçüm sistemi ve mobil içgörü platformu.', en: 'A low-cost, accessible, sustainable health platform combining a smart pad, precision biosensing, and mobile insight tracking.' },
+      'A low-cost, accessible, sustainable health platform combining a smart pad, precision biosensing, and mobile insight tracking.': { tr: 'Düşük maliyetli, erişilebilir ve sürdürülebilir sağlık takibi için akıllı ped, hassas ölçüm sistemi ve mobil içgörü platformu.', en: 'A low-cost, accessible, sustainable health platform combining a smart pad, precision biosensing, and mobile insight tracking.' },
+      'Çözümü İncele': { tr: 'Çözümü İncele', en: 'Explore the Solution' },
+      'Bilimsel Yol Haritası': { tr: 'Bilimsel Yol Haritası', en: 'Scientific Roadmap' },
+      'adet gören birey': { tr: 'adet gören birey', en: 'menstruating people' },
+      'İlk hedef': { tr: 'İlk hedef', en: 'First target' },
+      'inflamasyon sinyali': { tr: 'inflamasyon sinyali', en: 'inflammation signal' },
+      'Yaklaşım': { tr: 'Yaklaşım', en: 'Approach' },
+      'Detect Validate Translate': { tr: 'Tespit Et Doğrula Uygulamaya Taşı', en: 'Detect Validate Translate' },
+      'bilimden ürüne': { tr: 'bilimden ürüne', en: 'from science to product' },
+      'Göz ardı edemediğimiz gerçekler': { tr: 'Göz ardı edemediğimiz gerçekler', en: 'The facts we cannot ignore' },
+      'Sağlık verisi varken görünmez kalıyor.': { tr: 'Sağlık verisi varken görünmez kalıyor.', en: 'Health data exists, but remains invisible.' },
+      'Menstrüel döngü, milyonlarca birey için tekrar eden ve bilgi taşıyan bir biyolojik pencere. Buna rağmen tanı süreçleri gecikiyor, erişim bariyerleri büyüyor ve değerli biyolojik veri çoğu zaman atıl kalıyor.': { tr: 'Menstrüel döngü, milyonlarca birey için tekrar eden ve bilgi taşıyan bir biyolojik pencere. Buna rağmen tanı süreçleri gecikiyor, erişim bariyerleri büyüyor ve değerli biyolojik veri çoğu zaman atıl kalıyor.', en: 'The menstrual cycle is a recurring, information-rich biological window for millions of people. Yet diagnosis is delayed, access barriers persist, and valuable biological data often goes unused.' },
+      '2,1 milyar': { tr: '2,1 milyar', en: '2.1 billion' },
+      '150-200 milyon': { tr: '150-200 milyon', en: '150-200M' },
+      '30-130 bin': { tr: '30-130 bin', en: '30-130K' },
+      'Dünya genelinde adet gören birey': { tr: 'Dünya genelinde adet gören birey', en: 'Menstruating people worldwide' },
+      'WHO, 2026 referansıyla küresel ölçekte erişilebilir tarama ihtiyacını görünür kılar.': { tr: 'WHO, 2026 referansıyla küresel ölçekte erişilebilir tarama ihtiyacını görünür kılar.', en: 'Based on WHO 2026 references, this highlights the global need for accessible screening.' },
+      '6,6 yıl': { tr: '6,6 yıl', en: '6.6 years' },
+      'Endometriozis tanı gecikmesi': { tr: 'Endometriozis tanı gecikmesi', en: 'Endometriosis diagnosis delay' },
+      'Erken sinyal yakalama eksikliği klinik yolculuğu uzatır.': { tr: 'Erken sinyal yakalama eksikliği klinik yolculuğu uzatır.', en: 'Missing early signals can prolong the clinical journey.' },
+      'Teşhis edilmeyen vaka oranları': { tr: 'Teşhis edilmeyen vaka oranları', en: 'Undiagnosed case rates' },
+      'Düzenli, kişisel ve düşük bariyerli takip sistemlerine ihtiyaç var.': { tr: 'Düzenli, kişisel ve düşük bariyerli takip sistemlerine ihtiyaç var.', en: 'Regular, personal, low-barrier tracking systems are needed.' },
+      'Erişim Zorluğu': { tr: 'Erişim Zorluğu', en: 'Access Barriers' },
+      'Test ve uzman görüşüne ulaşım herkes için eşit değil.': { tr: 'Test ve uzman görüşüne ulaşım herkes için eşit değil.', en: 'Access to tests and specialist care is not equal for everyone.' },
+      'Tanı Gecikmeleri': { tr: 'Tanı Gecikmeleri', en: 'Diagnostic Delays' },
+      'Semptomlar uzun süre dağınık veriler olarak kalıyor.': { tr: 'Semptomlar uzun süre dağınık veriler olarak kalıyor.', en: 'Symptoms often remain scattered data points for too long.' },
+      'Atıl Biyolojik Veri': { tr: 'Atıl Biyolojik Veri', en: 'Unused Biological Data' },
+      'Menstrüel kanın taşıdığı sinyaller rutin takibe dönüşmüyor.': { tr: 'Menstrüel kanın taşıdığı sinyaller rutin takibe dönüşmüyor.', en: 'Signals carried by menstrual blood rarely become routine health tracking.' },
+      'Süreksiz Takip': { tr: 'Süreksiz Takip', en: 'Fragmented Tracking' },
+      'Tekil ölçümler kişisel trendleri açıklamakta yetersiz kalıyor.': { tr: 'Tekil ölçümler kişisel trendleri açıklamakta yetersiz kalıyor.', en: 'Single measurements are not enough to explain personal trends.' },
+      'Çözümümüz': { tr: 'Çözümümüz', en: 'Our Solution' },
+      'Akıllı pedden kişisel sağlık içgörüsüne.': { tr: 'Akıllı pedden kişisel sağlık içgörüsüne.', en: 'From smart pad to personal health insight.' },
+      'REDY, menstrüel kanı invaziv olmayan ve sürdürülebilir bir örnekleme kaynağı olarak ele alır. Akıllı ped, hassas ölçüm sistemi ve mobil takip uygulaması birlikte çalışarak uzunlamasına sağlık verisi üretir.': { tr: 'REDY, menstrüel kanı invaziv olmayan ve sürdürülebilir bir örnekleme kaynağı olarak ele alır. Akıllı ped, hassas ölçüm sistemi ve mobil takip uygulaması birlikte çalışarak uzunlamasına sağlık verisi üretir.', en: 'REDY treats menstrual blood as a non-invasive and sustainable sampling source. The smart pad, precision measurement system, and mobile app work together to produce longitudinal health data.' },
+      'Kan hücreleri': { tr: 'Kan hücreleri', en: 'Blood cells' },
+      'Hormonlar': { tr: 'Hormonlar', en: 'Hormones' },
+      'İnflamasyon': { tr: 'İnflamasyon', en: 'Inflammation' },
+      'Nükleik asitler': { tr: 'Nükleik asitler', en: 'Nucleic acids' },
+      'Proteinler': { tr: 'Proteinler', en: 'Proteins' },
+      'Metabolitler': { tr: 'Metabolitler', en: 'Metabolites' },
+      'Mikrobiyom': { tr: 'Mikrobiyom', en: 'Microbiome' },
+      'Döngü sinyalleri': { tr: 'Döngü sinyalleri', en: 'Cycle signals' },
+      'Akıllı Ped': { tr: 'Akıllı Ped', en: 'Smart Pad' },
+      'Günlük kullanıma yakın, düşük bariyerli örnekleme deneyimi.': { tr: 'Günlük kullanıma yakın, düşük bariyerli örnekleme deneyimi.', en: 'A familiar, low-barrier sampling experience close to everyday use.' },
+      'Hassas Ölçüm': { tr: 'Hassas Ölçüm', en: 'Precision Measurement' },
+      'CRP ile başlayan, çoklu biyobelirteçlere ölçeklenen biosensing altyapısı.': { tr: 'CRP ile başlayan, çoklu biyobelirteçlere ölçeklenen biyosensör altyapısı.', en: 'A biosensing infrastructure that starts with CRP and scales to multiple biomarkers.' },
+      'CRP ile başlayan, çoklu biyobelirteçlere ölçeklenen biyosensör altyapısı.': { tr: 'CRP ile başlayan, çoklu biyobelirteçlere ölçeklenen biyosensör altyapısı.', en: 'A biosensing infrastructure that starts with CRP and scales to multiple biomarkers.' },
+      'Mobil Takip': { tr: 'Mobil Takip', en: 'Mobile Tracking' },
+      'Kişisel referans aralığı, trend analizi ve yapay zeka destekli içgörüler.': { tr: 'Kişisel referans aralığı, trend analizi ve yapay zeka destekli içgörüler.', en: 'Personal reference ranges, trend analysis, and AI-powered insights.' },
+      'Nasıl çalışır?': { tr: 'Nasıl çalışır?', en: 'How it works' },
+      'Ped katmanından ölçüm bağlantısına kontrollü akış.': { tr: 'Ped katmanından ölçüm bağlantısına kontrollü akış.', en: 'A controlled flow from pad layers to the measurement connection.' },
+      'Teknik PDF': { tr: 'Teknik PDF', en: 'Technical PDF' },
+      'Smart pad architecture': { tr: 'Akıllı ped mimarisi', en: 'Smart pad architecture' },
+      'Üst yüzey': { tr: 'Üst yüzey', en: 'Top layer' },
+      'Temas alanı': { tr: 'Temas alanı', en: 'Contact area' },
+      'Sensör katmanı': { tr: 'Sensör katmanı', en: 'Sensor layer' },
+      'Ölçüm bağlantısı': { tr: 'Ölçüm bağlantısı', en: 'Measurement link' },
+      '01 Kullan': { tr: '01 Kullan', en: '01 Use' },
+      'Günlük akışa uyumlu örnekleme': { tr: 'Günlük akışa uyumlu örnekleme', en: 'Sampling that fits daily life' },
+      'Üst yüzey ve temas alanı, kullanıcı deneyimini tanıdık tutarken ölçüm katmanını destekler.': { tr: 'Üst yüzey ve temas alanı, kullanıcı deneyimini tanıdık tutarken ölçüm katmanını destekler.', en: 'The top layer and contact area keep the experience familiar while supporting the measurement layer.' },
+      '02 Algıla': { tr: '02 Algıla', en: '02 Sense' },
+      'Biyobelirteç sinyalini yakala': { tr: 'Biyobelirteç sinyalini yakala', en: 'Capture the biomarker signal' },
+      'Sensör bölgesi, inflamasyon ve döngüyle ilişkili sinyaller için tasarlanır.': { tr: 'Sensör bölgesi, inflamasyon ve döngüyle ilişkili sinyaller için tasarlanır.', en: 'The sensor region is designed for inflammation and cycle-related signals.' },
+      '03 Ölç': { tr: '03 Ölç', en: '03 Measure' },
+      'Hassas ölçüm sistemine aktar': { tr: 'Hassas ölçüm sistemine aktar', en: 'Transfer to precision measurement' },
+      'Veri, doğrulama odaklı ölçüm bağlantısıyla okunabilir ve karşılaştırılabilir hale gelir.': { tr: 'Veri, doğrulama odaklı ölçüm bağlantısıyla okunabilir ve karşılaştırılabilir hale gelir.', en: 'The data becomes readable and comparable through a validation-focused measurement link.' },
+      '04 Takip Et': { tr: '04 Takip Et', en: '04 Track' },
+      'Mobil sağlık trendine dönüştür': { tr: 'Mobil sağlık trendine dönüştür', en: 'Turn it into a mobile health trend' },
+      'Tekil sonuçlar zaman içinde kişisel referans aralığı ve sağlık içgörüsüne bağlanır.': { tr: 'Tekil sonuçlar zaman içinde kişisel referans aralığı ve sağlık içgörüsüne bağlanır.', en: 'Individual results connect to personal reference ranges and health insights over time.' },
+      'Biyobelirteç yol haritası': { tr: 'Biyobelirteç yol haritası', en: 'Biomarker roadmap' },
+      'CRP ile başlayıp multiplex biosensing platformuna genişleyen bilimsel temel.': { tr: 'CRP ile başlayıp çoklu biyosensör platformuna genişleyen bilimsel temel.', en: 'A scientific foundation that starts with CRP and expands into a multiplex biosensing platform.' },
+      'CRP ile başlayıp çoklu biyosensör platformuna genişleyen bilimsel temel.': { tr: 'CRP ile başlayıp çoklu biyosensör platformuna genişleyen bilimsel temel.', en: 'A scientific foundation that starts with CRP and expands into a multiplex biosensing platform.' },
+      'REDY’nin yaklaşımı, erken hedef biyobelirteci teknik olarak doğruladıktan sonra klinik anlamlılığı ve ölçeklenebilir ürün deneyimini aynı yol haritasında birleştirir.': { tr: 'REDY’nin yaklaşımı, erken hedef biyobelirteci teknik olarak doğruladıktan sonra klinik anlamlılığı ve ölçeklenebilir ürün deneyimini aynı yol haritasında birleştirir.', en: 'REDY’s approach combines technical validation of the first target biomarker with clinical meaning and a scalable product experience.' },
+      'Aşama 1': { tr: 'Aşama 1', en: 'Stage 1' },
+      'Aşama 2': { tr: 'Aşama 2', en: 'Stage 2' },
+      'Aşama 3': { tr: 'Aşama 3', en: 'Stage 3' },
+      'Aşama 4': { tr: 'Aşama 4', en: 'Stage 4' },
+      'Aşama 5': { tr: 'Aşama 5', en: 'Stage 5' },
+      'C-reaktif proteinle inflamasyon sinyali.': { tr: 'C-reaktif proteinle inflamasyon sinyali.', en: 'Inflammation signaling with C-reactive protein.' },
+      'Klinik anlamlı protein paneli.': { tr: 'Klinik anlamlı protein paneli.', en: 'Clinically meaningful protein panel.' },
+      'Döngü ve metabolik bağlantılar.': { tr: 'Döngü ve metabolik bağlantılar.', en: 'Cycle and metabolic connections.' },
+      'Sistemik sağlık sinyalleri.': { tr: 'Sistemik sağlık sinyalleri.', en: 'Systemic health signals.' },
+      'Multiplex platform genişlemesi.': { tr: 'Çoklu platform genişlemesi.', en: 'Multiplex platform expansion.' },
+      'Çoklu platform genişlemesi.': { tr: 'Çoklu platform genişlemesi.', en: 'Multiplex platform expansion.' },
+      'Detect': { tr: 'Tespit Et', en: 'Detect' },
+      'Tespit Et': { tr: 'Tespit Et', en: 'Detect' },
+      'Validate': { tr: 'Doğrula', en: 'Validate' },
+      'Doğrula': { tr: 'Doğrula', en: 'Validate' },
+      'Translate': { tr: 'Uygulamaya Taşı', en: 'Translate' },
+      'Uygulamaya Taşı': { tr: 'Uygulamaya Taşı', en: 'Translate' },
+      'Biyobelirteç sinyalini örnek içinde güvenilir şekilde yakala.': { tr: 'Biyobelirteç sinyalini örnek içinde güvenilir şekilde yakala.', en: 'Reliably capture the biomarker signal within the sample.' },
+      'Teknik performansı, tekrar edilebilirliği ve kişisel trend değerini doğrula.': { tr: 'Teknik performansı, tekrar edilebilirliği ve kişisel trend değerini doğrula.', en: 'Validate technical performance, repeatability, and personal trend value.' },
+      'Sinyali kullanıcı ve klinik paydaşlar için anlamlı aksiyona dönüştür.': { tr: 'Sinyali kullanıcı ve klinik paydaşlar için anlamlı aksiyona dönüştür.', en: 'Translate the signal into meaningful action for users and clinical stakeholders.' },
+      'REDY Health': { tr: 'REDY Sağlık', en: 'REDY Health' },
+      'Kişisel referans aralığın': { tr: 'Kişisel referans aralığın', en: 'Your personal reference range' },
+      'CRP trend': { tr: 'CRP eğilimi', en: 'CRP trend' },
+      'AI insight': { tr: 'Yapay zeka içgörüsü', en: 'AI insight' },
+      'Bu döngüde inflamasyon sinyalin kişisel ortalamanın üzerinde.': { tr: 'Bu döngüde inflamasyon sinyalin kişisel ortalamanın üzerinde.', en: 'Your inflammation signal is above your personal average this cycle.' },
+      'Longitudinal tracking': { tr: 'Uzunlamasına takip', en: 'Longitudinal tracking' },
+      'Mobil sağlık takip uygulaması': { tr: 'Mobil sağlık takip uygulaması', en: 'Mobile health tracking app' },
+      'Tek seferlik sonuçlar değil, kişisel sağlık eğrisi.': { tr: 'Tek seferlik sonuçlar değil, kişisel sağlık eğrisi.', en: 'Not one-off results, but a personal health curve.' },
+      'Uygulama, biyobelirteç ölçümlerini döngü bağlamında saklar; kişisel referans aralığı, trend değişimi ve yapay zeka destekli açıklamalarla veriyi anlaşılır kılar.': { tr: 'Uygulama, biyobelirteç ölçümlerini döngü bağlamında saklar; kişisel referans aralığı, trend değişimi ve yapay zeka destekli açıklamalarla veriyi anlaşılır kılar.', en: 'The app stores biomarker measurements in cycle context and makes data understandable through personal reference ranges, trend changes, and AI-supported explanations.' },
+      'AI insights': { tr: 'Yapay zeka içgörüleri', en: 'AI insights' },
+      'Kişisel geçmişe göre yorumlanan sağlık içgörüleri.': { tr: 'Kişisel geçmişe göre yorumlanan sağlık içgörüleri.', en: 'Health insights interpreted against personal history.' },
+      'Referans aralığı': { tr: 'Referans aralığı', en: 'Reference range' },
+      'Tekil normlar yerine kişiye özel baz çizgi.': { tr: 'Tekil normlar yerine kişiye özel baz çizgi.', en: 'A personal baseline instead of one-size-fits-all norms.' },
+      'Uzunlamasına veri': { tr: 'Uzunlamasına veri', en: 'Longitudinal data' },
+      'Döngüler boyunca değişim takibi.': { tr: 'Döngüler boyunca değişim takibi.', en: 'Tracking change across cycles.' },
+      'Pazar fırsatı ve iş modeli': { tr: 'Pazar fırsatı ve iş modeli', en: 'Market opportunity and business model' },
+      'Erişilebilir takip, ölçeklenebilir abonelik ekonomisi.': { tr: 'Erişilebilir takip, ölçeklenebilir abonelik ekonomisi.', en: 'Accessible tracking, scalable subscription economics.' },
+      'REDY; sarf ürün, dijital sağlık takibi ve kurumsal iş birlikleriyle hem kullanıcıya hem de araştırma ekosistemine veri odaklı değer üretir.': { tr: 'REDY; sarf ürün, dijital sağlık takibi ve kurumsal iş birlikleriyle hem kullanıcıya hem de araştırma ekosistemine veri odaklı değer üretir.', en: 'REDY creates data-driven value for users and the research ecosystem through consumables, digital health tracking, and institutional partnerships.' },
+      'Küresel adet gören birey popülasyonu': { tr: 'Küresel adet gören birey popülasyonu', en: 'Global menstruating population' },
+      'Erişilebilir erken hedef segment': { tr: 'Erişilebilir erken hedef segment', en: 'Accessible early target segment' },
+      'İlk ölçeklenebilir kullanıcı hedefi': { tr: 'İlk ölçeklenebilir kullanıcı hedefi', en: 'Initial scalable user target' },
+      'Sarf Geliri': { tr: 'Sarf Geliri', en: 'Consumables Revenue' },
+      'Akıllı ped aboneliği ve düzenli tüketim modeli.': { tr: 'Akıllı ped aboneliği ve düzenli tüketim modeli.', en: 'Smart pad subscription and recurring consumption model.' },
+      'Abonelik Geliri': { tr: 'Abonelik Geliri', en: 'Subscription Revenue' },
+      'Dijital sağlık takibi, gelişmiş raporlama ve içgörü paketleri.': { tr: 'Dijital sağlık takibi, gelişmiş raporlama ve içgörü paketleri.', en: 'Digital health tracking, advanced reporting, and insight packages.' },
+      'Kurumsal Gelir': { tr: 'Kurumsal Gelir', en: 'Institutional Revenue' },
+      'Araştırma kurumları, klinik partnerler ve veri odaklı iş birlikleri.': { tr: 'Araştırma kurumları, klinik partnerler ve veri odaklı iş birlikleri.', en: 'Research institutions, clinical partners, and data-focused collaborations.' },
+      '$20-40 Milyar/yıl pazar potansiyeli hedeflenen segment genişlemesiyle ilişkilendirilir.': { tr: '$20-40 milyar/yıl pazar potansiyeli hedeflenen segment genişlemesiyle ilişkilendirilir.', en: '$20-40 billion/year market potential is linked to targeted segment expansion.' },
+      'Biz kimiz?': { tr: 'Biz kimiz?', en: 'Who we are' },
+      'Bilimsel merakı ürüne dönüştüren kurucu ekip.': { tr: 'Bilimsel merakı ürüne dönüştüren kurucu ekip.', en: 'A founding team turning scientific curiosity into product.' },
+      'Co-Founder': { tr: 'Kurucu Ortak', en: 'Co-Founder' },
+      'Türk-Alman Üniversitesi Moleküler Biyoteknoloji': { tr: 'Türk-Alman Üniversitesi Moleküler Biyoteknoloji', en: 'Turkish-German University Molecular Biotechnology' },
+      'Türk-Alman Üniversitesi | Moleküler Biyoteknoloji': { tr: 'Türk-Alman Üniversitesi | Moleküler Biyoteknoloji', en: 'Turkish-German University | Molecular Biotechnology' },
+      'Bahçeşehir Üniversitesi Moleküler Biyoloji ve Genetik': { tr: 'Bahçeşehir Üniversitesi Moleküler Biyoloji ve Genetik', en: 'Bahçeşehir University Molecular Biology and Genetics' },
+      'Bahçeşehir Üniversitesi | Moleküler Biyoloji ve Genetik': { tr: 'Bahçeşehir Üniversitesi | Moleküler Biyoloji ve Genetik', en: 'Bahçeşehir University | Molecular Biology and Genetics' },
+      'Marka ve teknik dosyalar': { tr: 'Marka ve teknik dosyalar', en: 'Brand and technical files' },
+      'REDY kimliği ve ürün anlatımı tek yerde.': { tr: 'REDY kimliği ve ürün anlatımı tek yerde.', en: 'REDY identity and product narrative in one place.' },
+      'Brand palette': { tr: 'Marka paleti', en: 'Brand palette' },
+      'Resmi renk sistemi': { tr: 'Resmi renk sistemi', en: 'Official color system' },
+      'Marka kılavuzu görsel olarak sayfaya basılmadan, renkler arayüzün tamamında kullanıldı.': { tr: 'Marka kılavuzu görsel olarak sayfaya basılmadan, renkler arayüzün tamamında kullanıldı.', en: 'The brand guide image is not displayed directly; its colors are used throughout the interface.' },
+      'Website metinleri': { tr: 'Web sitesi metinleri', en: 'Website copy' },
+      'Web sitesi metinleri': { tr: 'Web sitesi metinleri', en: 'Website copy' },
+      'Landing page içerik omurgası ve metinsel kaynak dosyası.': { tr: 'Açılış sayfası içerik omurgası ve metinsel kaynak dosyası.', en: 'Landing page content structure and source copy file.' },
+      'Açılış sayfası içerik omurgası ve metinsel kaynak dosyası.': { tr: 'Açılış sayfası içerik omurgası ve metinsel kaynak dosyası.', en: 'Landing page content structure and source copy file.' },
+      'Teknik sunum ve şemalar': { tr: 'Teknik sunum ve şemalar', en: 'Technical deck and diagrams' },
+      'Ped yapısı, ürün yaklaşımı, bilimsel temel ve uygulama anlatımı için ek kaynak.': { tr: 'Ped yapısı, ürün yaklaşımı, bilimsel temel ve uygulama anlatımı için ek kaynak.', en: 'Additional source for pad structure, product approach, scientific foundation, and app narrative.' },
+      'Birlikte geliştirelim': { tr: 'Birlikte geliştirelim', en: 'Let’s build together' },
+      'Araştırma kurumları, yatırımcılar ve sağlık partnerleriyle konuşmaya hazırız.': { tr: 'Araştırma kurumları, yatırımcılar ve sağlık partnerleriyle konuşmaya hazırız.', en: 'We are ready to talk with research institutions, investors, and health partners.' },
+      'REDY, menstrüel sağlık verisini erişilebilir ve sürdürülebilir bir takip altyapısına dönüştürmek için bilimsel ve stratejik iş birliklerine açıktır.': { tr: 'REDY, menstrüel sağlık verisini erişilebilir ve sürdürülebilir bir takip altyapısına dönüştürmek için bilimsel ve stratejik iş birliklerine açıktır.', en: 'REDY is open to scientific and strategic collaborations to turn menstrual health data into an accessible and sustainable tracking infrastructure.' },
+      'Follow Our Journey': { tr: 'Yolculuğumuzu Takip Edin', en: 'Follow Our Journey' },
+      'Gelişmeleri, pilot çalışmaları ve yatırım haberlerini takip etmek için bültene katılın.': { tr: 'Gelişmeleri, pilot çalışmaları ve yatırım haberlerini takip etmek için bültene katılın.', en: 'Join the newsletter to follow updates, pilot studies, and investment news.' },
+      'E-posta': { tr: 'E-posta', en: 'Email' },
+      'İlgi alanı': { tr: 'İlgi alanı', en: 'Area of interest' },
+      'Araştırma kurumu': { tr: 'Araştırma kurumu', en: 'Research institution' },
+      'Yatırımcı': { tr: 'Yatırımcı', en: 'Investor' },
+      'Klinik / sağlık partneri': { tr: 'Klinik / sağlık partneri', en: 'Clinical / health partner' },
+      'Topluluk ve medya': { tr: 'Topluluk ve medya', en: 'Community and media' },
+      'Bültene Katıl': { tr: 'Bültene Katıl', en: 'Join Newsletter' },
+      '© 2026 REDY. All rights reserved.': { tr: '© 2026 REDY. Tüm hakları saklıdır.', en: '© 2026 REDY. All rights reserved.' },
+      '© 2026 REDY. Tüm hakları saklıdır.': { tr: '© 2026 REDY. Tüm hakları saklıdır.', en: '© 2026 REDY. All rights reserved.' }
+    };
+
+    const textNodes = [];
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        return node.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+
+    function findTranslation(key) {
+      if (translations[key]) {
+        return translations[key];
+      }
+
+      return Object.values(translations).find((entry) => entry.tr === key || entry.en === key);
+    }
+
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      const key = node.nodeValue.trim();
+      const translation = findTranslation(key);
+      if (translation) {
+        textNodes.push({
+          node,
+          translation,
+          prefix: node.nodeValue.match(/^\s*/)[0],
+          suffix: node.nodeValue.match(/\s*$/)[0]
+        });
+      }
+    }
+
+    function applyTranslations(language) {
+      textNodes.forEach(({ node, translation, prefix, suffix }) => {
+        node.nodeValue = `${prefix}${translation[language]}${suffix}`;
+      });
+
+      document.documentElement.lang = language;
+      document.title = language === 'en'
+        ? 'REDY | Continuous Health Data from Menstrual Blood'
+        : 'REDY | Menstrüel Kandan Sürekli Sağlık Verisi';
+
+      const description = document.querySelector('meta[name="description"]');
+      const socialTitle = document.querySelector('meta[property="og:title"]');
+      const socialDescription = document.querySelector('meta[property="og:description"]');
+      if (description) {
+        description.setAttribute('content', language === 'en'
+          ? 'REDY is a smart pad and mobile tracking platform that generates continuous health data from menstrual blood.'
+          : 'REDY, menstrüel kandan sürekli sağlık verisi üreten akıllı ped ve mobil takip platformudur.');
+      }
+      if (socialTitle) {
+        socialTitle.setAttribute('content', document.title);
+      }
+      if (socialDescription) {
+        socialDescription.setAttribute('content', language === 'en'
+          ? 'A smart pad, precision measurement system, and mobile health insights for continuous data.'
+          : 'Akıllı ped, hassas ölçüm sistemi ve mobil sağlık içgörüleriyle sürekli sağlık verisi.');
+      }
+
+      if (emailInput) {
+        emailInput.placeholder = language === 'en' ? 'name@example.com' : 'ornek@mail.com';
+      }
+    }
+
+    function setLanguage(language) {
+      const isEnglish = language === 'en';
+      root.classList.toggle('language-en', isEnglish);
+      root.classList.toggle('language-tr', !isEnglish);
+      applyTranslations(language);
+      trButton.setAttribute('aria-pressed', String(!isEnglish));
+      enButton.setAttribute('aria-pressed', String(isEnglish));
+      trButton.className = !isEnglish
+        ? 'rounded-full bg-redy-bordo px-3 py-2 text-xs font-bold text-white shadow-crisp'
+        : 'rounded-full border border-redy-bordo/20 bg-white px-3 py-2 text-xs font-bold text-redy-bordo';
+      enButton.className = isEnglish
+        ? 'rounded-full bg-redy-bordo px-3 py-2 text-xs font-bold text-white shadow-crisp'
+        : 'rounded-full border border-redy-bordo/20 bg-white px-3 py-2 text-xs font-bold text-redy-bordo';
+    }
+
+    trButton.addEventListener('click', () => setLanguage('tr'));
+    enButton.addEventListener('click', () => setLanguage('en'));
+
+    function setMenuState(isOpen) {
+      mobileMenu.classList.toggle('hidden', !isOpen);
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+      menuToggle.setAttribute('aria-label', isOpen ? 'Menüyü kapat' : 'Menüyü aç');
+    }
+
+    menuToggle.addEventListener('click', () => {
+      setMenuState(mobileMenu.classList.contains('hidden'));
+    });
+    mobileMenu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => setMenuState(false));
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        setMenuState(false);
+      }
+    });
+
+    setLanguage('tr');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.16 });
+
+    document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
+  </script>
+</body>
+</html>
